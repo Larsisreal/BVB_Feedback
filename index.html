@@ -9,7 +9,9 @@
 <body class="bg-gray-100 min-h-screen flex items-center justify-center">
   <div class="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg">
     <h1 class="text-2xl font-bold text-center text-blue-600 mb-6">Anonymes Feedback – USS GmbH</h1>
-    <form action="https://formspree.io/f/movlzegp" method="POST" class="space-y-4">
+    
+    <!-- Formular -->
+    <form id="feedback-form" action="https://formspree.io/f/movlzegp" method="POST" class="space-y-4">
       <div>
         <label class="block text-sm font-medium text-gray-700">Dein Feedback</label>
         <textarea name="feedback" required class="mt-1 block w-full border border-gray-300 rounded-lg p-2 h-32 focus:ring focus:ring-blue-300"></textarea>
@@ -17,9 +19,37 @@
       <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
         Feedback absenden
       </button>
+      <!-- Erfolgsmeldung -->
+      <p id="success-message" class="hidden text-green-600 font-semibold mt-4 text-center">
+        ✅ Dein Feedback wurde abgeschickt. Vielen Dank!
+      </p>
     </form>
-    <p class="text-xs text-gray-500 mt-4 text-center">Dein Feedback ist anonym. Vielen Dank!</p>
+
+    <p class="text-xs text-gray-500 mt-4 text-center">Dein Feedback ist anonym.</p>
     <p class="text-xs text-red-500 mt-2 text-center">⚠️ Dies ist keine offizielle Seite der USS GmbH, sondern nur ein Beispiel für einen Aufsatz.</p>
   </div>
+
+  <script>
+    const form = document.getElementById('feedback-form');
+    const successMessage = document.getElementById('success-message');
+
+    form.addEventListener('submit', async function(event) {
+      event.preventDefault(); // Verhindert Standard-Weiterleitung
+
+      const formData = new FormData(form);
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        form.reset(); // Formular leeren
+        successMessage.classList.remove("hidden"); // Erfolgsmeldung anzeigen
+      } else {
+        alert("❌ Es gab ein Problem beim Senden. Bitte versuche es erneut.");
+      }
+    });
+  </script>
 </body>
 </html>
